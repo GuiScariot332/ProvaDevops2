@@ -19,3 +19,24 @@ services:
 
 volumes:
   postgres_data:
+
+# -- API
+  api:
+    build:
+      context: ../api
+      dockerfile: Dockerfile
+    image: prova_api:latest
+    container_name: prova_api
+    restart: unless-stopped
+    environment:
+      API_PORT: ${API_PORT}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_NAME: ${POSTGRES_DB}
+    ports:
+      - "${API_PORT}:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
