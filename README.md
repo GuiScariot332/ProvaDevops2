@@ -1,10 +1,9 @@
 Prova P2 - DevOps
 Projeto da P2 da disciplina de DevOps. Tem uma API em NestJS, um front em React e um Postgres, tudo rodando com Docker Compose.
 Pastas:
-• api/ - API NestJS com CRUD de produtos
-• front/ - front em React (Vite) que mostra os produtos numa tabela
+• api/ - API NestJS com CRUD de fornecedores
+• front/ - front em React (Vite) que mostra os fornecedores numa tabela
 • deploy/ - docker-compose.yml e o .env.example
-
 
 Requisitos
 • Docker e Docker Compose instalados
@@ -21,6 +20,7 @@ Depois que terminar de buildar:
 • front: http://localhost:8080
 • swagger: http://localhost:3000/docs
 • postgres: localhost:5432 (usuario e senha estao no .env)
+
 
 Endpoints
 Todos em /suppliers:
@@ -41,7 +41,13 @@ Exemplo do retorno do GET:
   }
 ]
 
+
 Como derrubar
 cd deploy
 docker compose down -v
 O -v apaga tambem o volume do postgres. Se quiser manter os dados pra subir de novo depois, roda sem o -v.
+
+Observacoes
+• O banco cria a tabela sozinho na primeira vez (synchronize do TypeORM).
+• As variaveis de conexao estao no .env dentro de deploy/.
+• O front conversa com a API pela porta publicada (localhost:3000) porque a requisicao sai do navegador.
