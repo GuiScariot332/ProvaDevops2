@@ -11,16 +11,14 @@ services:
       - "${POSTGRES_PORT}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - db_net
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 5s
-      timeout: 5s 
+      timeout: 5s
       retries: 5
 
-volumes:
-  postgres_data:
-
-# -- API
   api:
     build:
       context: ../api
@@ -40,3 +38,29 @@ volumes:
     depends_on:
       postgres:
         condition: service_healthy
+    networks:
+      - db_net
+      - app_net
+
+  front:
+    build:
+      context: ../front
+      dockerfile: Dockerfile
+    image: prova_front:latest
+    container_name: prova_front
+    restart: unless-stopped
+    ports:
+      - "${FRONT_PORT}:80"
+    depends_on:
+      - api
+    networks:
+      - app_net
+
+networks:
+  db_net:
+    driver: bridge
+  app_net:
+    driver: bridge
+
+volumes:
+  postgres_data:
